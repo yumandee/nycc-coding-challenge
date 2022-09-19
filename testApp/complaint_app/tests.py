@@ -33,34 +33,4 @@ class ViewsTestCase(TestCase):
     res = self.client.get('/api/complaints/', HTTP_AUTHORIZATION='Token ' + token.key)
         
     self.assertEqual(res.status_code, 200)
-    
-    
-
-    
-
-client = APIClient()
-token = Token.objects.get(user__username='fcabrera')
-client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
-print(token)
-# response = client.get('/api/complaints/openCases/')
-# allOpen = True
-# for case in response:
-#   print(case)
-#   # if case.closedate:
-#   #   allOpen = False
   
-# print(allOpen)
-
-# # request = APIRequestFactory().get("http://127:0.0.1:8000/api/openCases/")
-# # detail = OpenCasesViewSet.as_view({'get': 'list'})
-
-# # user = User.objects.filter(username__exact='fcabrera')[0]
-# # force_authenticate(request, user=user)
-# response.render() # Render to access response.content
-# print(response.content)
-# # response = detail(request)
-# # response.render()
-# print(response.content)
-# client.logout()
-
-# # assert response.status_code == 200

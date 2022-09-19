@@ -25,7 +25,7 @@ class ComplaintViewSet(viewsets.ModelViewSet):
 
   def list(self, request):
     if not request.user.is_authenticated:
-      return Response(status=404)
+      return Response(status=401)
 
     user = request.user
     userProfile = UserProfile.objects.get(user=user)
@@ -46,13 +46,17 @@ class OpenCasesViewSet(viewsets.ModelViewSet):
     closedate__isnull=True
   )
   
+
   def list(self, request):
+    print('Open?')
+    
     # Check if user is authenticated
     if not request.user.is_authenticated:
-      return Response(status=404)
+      return Response(status=401)
 
     user = request.user
-    userProfile = UserProfile.objects.filter(user=user)[0]
+
+    userProfile = UserProfile.objects.get(user=user)
     # Open complaints: Complaints that have no closedate indicate complaints that are still open.
     openCases = self.queryset.filter(
       account__exact=formattedDistrict(userProfile.district)
@@ -74,8 +78,8 @@ class ClosedCasesViewSet(viewsets.ModelViewSet):
     # Closed complaints: closedate is less than current date
     # By default, closedate should be greater than opendate
     
-    if not request.user.is_authenticated:
-      return Response([], status=404)
+    # if not request.user.is_authenticated:
+    #   return Response([], status=404)
     user = request.user
     userProfile = UserProfile.objects.filter(user=user)[0]
     
@@ -101,4 +105,4 @@ class TopComplaintTypeViewSet(viewsets.ModelViewSet):
   # print('TOP COMPLAINTS', queryset)
   def list(self, request):
     # Get the top 3 complaint types from the user's district
-    return Response()
+    return Response(["one", "two", "three"])
