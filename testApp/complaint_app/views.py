@@ -58,6 +58,7 @@ class OpenCasesViewSet(viewsets.ModelViewSet):
       account__exact=formattedDistrict(userProfile.district)
     )
 
+      
     # Get only the open complaints from the user's district
     serializer = ComplaintSerializer(openCases, many=True)
     return Response(serializer.data)
@@ -90,6 +91,14 @@ class ClosedCasesViewSet(viewsets.ModelViewSet):
     
 class TopComplaintTypeViewSet(viewsets.ModelViewSet):
   http_method_names = ['get']
+  serializer_class = ComplaintSerializer
+  queryset = Complaint.objects.exclude(
+    complaint_type__isnull=True
+  ).exclude(
+    complaint_type=""
+  )
+  
+  # print('TOP COMPLAINTS', queryset)
   def list(self, request):
     # Get the top 3 complaint types from the user's district
     return Response()
