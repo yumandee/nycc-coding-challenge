@@ -10,11 +10,28 @@ from datetime import date
 class ComplaintViewSet(viewsets.ModelViewSet):
   http_method_names = ['get']
   # serializer_class = ComplaintSerializer
-  queryset = Complaint.objects.all()
-  
   def list(self, request):
+    if not request.user.is_authenticated:
+      return Response(status=404)
+
+    user = request.user 
+    userProfile = UserProfile.objects.filter(user=user)[0]
+    
+    """
+    Single district numbers in UserProfile table are not padded by zero, but are padded in Complaint table.
+    FORMAT: NYCC__
+    """
+    dist = userProfile.district
+    dist = dist if len(dist) > 1 else '0' + dist
+    dist = 'NYCC' + dist
+    
+    complaints = Complaint.objects.all().filter(
+      council_dist__exact=dist
+    )
+    
     # Get all complaints from the user's district
-    serializer = ComplaintSerializer(self.queryset, many=True)
+    serializer = ComplaintSerializer(complaints, many=True)
+    print(serializer.data)
     return Response(serializer.data)
 
 class OpenCasesViewSet(viewsets.ModelViewSet):
