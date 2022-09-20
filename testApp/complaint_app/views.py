@@ -1,9 +1,9 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, status
 from .models import UserProfile, Complaint
 from .serializers import UserSerializer, UserProfileSerializer, ComplaintSerializer
 from rest_framework.response import Response
-from rest_framework import status
-import datetime
+from collections import defaultdict
+from django.shortcuts import get_object_or_404
 # Create your views here.
 
 
@@ -24,9 +24,6 @@ class ComplaintViewSet(viewsets.ModelViewSet):
   queryset = Complaint.objects.all()
 
   def list(self, request):
-    if not request.user.is_authenticated:
-      return Response(status=401)
-
     user = request.user
     userProfile = UserProfile.objects.get(user=user)
     
@@ -38,60 +35,47 @@ class ComplaintViewSet(viewsets.ModelViewSet):
     serializer = ComplaintSerializer(complaints, many=True)
     return Response(serializer.data)
 
-
 class OpenCasesViewSet(viewsets.ModelViewSet):
   http_method_names = ['get']
   serializer_class = ComplaintSerializer
   queryset = Complaint.objects.filter(
     closedate__isnull=True
   )
-  
-
   def list(self, request):
-    print('Open?')
-    
-    # Check if user is authenticated
-    if not request.user.is_authenticated:
-      return Response(status=401)
-
     user = request.user
-
     userProfile = UserProfile.objects.get(user=user)
     # Open complaints: Complaints that have no closedate indicate complaints that are still open.
     openCases = self.queryset.filter(
       account__exact=formattedDistrict(userProfile.district)
     )
-
       
     # Get only the open complaints from the user's district
     serializer = ComplaintSerializer(openCases, many=True)
-    return Response(serializer.data)
+    return Response(serializer.data, status=200, headers={
+      'Content-Type': 'application/json'
+    })
 
 class ClosedCasesViewSet(viewsets.ModelViewSet):
   http_method_names = ['get']
   serializer_class = ComplaintSerializer
   queryset = Complaint.objects.filter(
-    closedate__isnull=True
+    closedate__isnull=False
   )
   def list(self, request):
     # Get only complaints that are close from the user's district
-    # Closed complaints: closedate is less than current date
-    # By default, closedate should be greater than opendate
-    
-    # if not request.user.is_authenticated:
-    #   return Response([], status=404)
+    # Closed complaints: closedate exists
+
     user = request.user
     userProfile = UserProfile.objects.filter(user=user)[0]
     
-    current_date = datetime.date.today()
     closedCases = self.queryset.filter(
       account__exact=formattedDistrict(userProfile.district)
-    ).filter(
-      closedate__lte=current_date
     )
     
     serializer = ComplaintSerializer(closedCases, many=True)
-    return Response(serializer.data)
+    if serializer.data == []:
+      return Response(serializer.data, status=204)
+    return Response(serializer.data, status=200)
     
 class TopComplaintTypeViewSet(viewsets.ModelViewSet):
   http_method_names = ['get']
@@ -102,7 +86,23 @@ class TopComplaintTypeViewSet(viewsets.ModelViewSet):
     complaint_type=""
   )
   
-  # print('TOP COMPLAINTS', queryset)
+  types = defaultdict(int)
+  
   def list(self, request):
     # Get the top 3 complaint types from the user's district
-    return Response(["one", "two", "three"])
+    user = request.user
+    userProfile = UserProfile.objects.get(user=user)
+    complaints = self.queryset.filter(
+      account__exact=formattedDistrict(userProfile.district)
+    )
+    
+    # Record counts of all types of complaints
+    for complaint in complaints:
+      self.types[complaint.complaint_type] += 1
+    
+    # Sort by occurrences
+    sorted_complaints = sorted(self.types, key=self.types.get, reverse=True)[:3]
+
+    return Response(data=sorted_complaints)
+  
+  
