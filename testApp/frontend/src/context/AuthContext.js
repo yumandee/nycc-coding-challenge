@@ -19,7 +19,7 @@ export const AuthProvider = ({ children }) => {
    * @param {string} username 
    * @param {string} password 
    */
-  const loginUser = async (username, password) => {
+  const loginUser = async (username, password, callback) => {
     try {
       const response = await fetch('http://127.0.0.1:8000/login/', {
         method: 'POST',
@@ -33,16 +33,13 @@ export const AuthProvider = ({ children }) => {
       });
       const data = await response.json();
       if (response.status === 200) {
-        setAuthToken(data);
-        // setUser(data); // For this project, token is the same
-        redirect('/');
+        setAuthToken(data.token);
+        localStorage.setItem('authToken', JSON.stringify(data.token));
       } 
-
-      return response.status
-    } catch {
-      return 401;
+      callback(response.status);
+    } catch (error) {
+      console.log(error)
     }
-    
   };
 
   /**

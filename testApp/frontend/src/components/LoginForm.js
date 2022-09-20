@@ -1,47 +1,48 @@
 import React, { useContext, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import AuthContext from '../context/AuthContext';
 
 const LoginForm = () => {
   const { loginUser } = useContext(AuthContext);
-
+  const navigate = useNavigate();
   const [errors, setErrors] = useState(false);
 
-  const [values, setValues] = useState({
-    username: '',
-    password: '',
-  });
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const success = loginUser(values.username, values.password);
-    console.log(success)
-  };
+    setErrors(false);
+    const formData = new FormData(e.currentTarget);
+    loginUser(formData.get('username'), formData.get('password'), (status) => {
+      if (status === 200) {
+        navigate('/', { replace: true }); //go back to previous page and replace in stack so going back doesn't bring back to login
+      } else {
+        setErrors(true);
+      }
 
-  const handleChange = (e) => {
-    setValues({
-      ...values,
-      [e.target.name]: e.target.value,
     });
+    
   };
 
   return (
     <div className='login-form__div'>
       <form className='login-form__form' method='POST' onSubmit={handleSubmit}>
+        <label>
+          Username: 
         <input
           type='text'
           placeholder='Username'
-          value={values.username}
           name='username'
-          onChange={handleChange}
         />
+        </label>
+        <label>
+          Password:
         <input
           type='password'
           placeholder='Password'
-          value={values.password}
           name='password'
-          onChange={handleChange}
         />
-        { errors && <div> You have entered invalid credentials. </div>}
+        </label>
+        { errors && <div className='login-form__errors'> You have entered invalid credentials. </div>}
         <button type='submit'>Login</button>
       </form>
     </div>
