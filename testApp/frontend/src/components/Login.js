@@ -17,7 +17,8 @@ const Login = () => {
     );
 
   const handleSubmit = (e) => {
-
+    e.preventDefault();
+    
   }
 
   const handleChange = (e) => {
@@ -28,10 +29,10 @@ const Login = () => {
   }
 
   return (
-    <div>
-      <form method='POST' onSubmit={handleSubmit}>
-        <input type='text' placeholder='Username' name='username' onChange={handleChange} />
-        <input type='password' placeholder='Password' name='password' onChange={handleChange}/>
+    <div class='login-form__div'>
+      <form class='login-form__form' method='POST' onSubmit={handleSubmit}>
+        <input type='text' placeholder='Username' value={values.username} name='username' onChange={handleChange} />
+        <input type='password' placeholder='Password' value={values.password} name='password' onChange={handleChange}/>
         <input type='submit' />
       </form>
     </div>

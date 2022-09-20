@@ -5,7 +5,8 @@ import { Login } from './components';
 const App = () => (
   <BrowserRouter>
     <Routes>
-      <Route path='/' exact element= {<Login />} />
+      {/* <Route path='/' exact element= {< />} /> */}
+      <Route path='/login' element={<Login />} />
     </Routes>
   </BrowserRouter>
 );
