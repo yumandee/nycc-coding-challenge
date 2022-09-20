@@ -105,4 +105,26 @@ class TopComplaintTypeViewSet(viewsets.ModelViewSet):
 
     return Response(data=sorted_complaints)
   
+class ConstituentComplaintsViewSet(viewsets.ModelViewSet):
+  http_method_names = ['get']
+  serializer_class = ComplaintSerializer
+  queryset = Complaint.objects.exclude(
+    council_dist__isnull=True
+  ).exclude(
+    council_dist=''
+  )
+  
+  def list(self, request):
+    user = request.user
+    userProfile = UserProfile.objects.get(user=user)
+    constituentComplaints = self.queryset.filter(
+      council_dist=formattedDistrict(userProfile.district)
+    )
+    
+    serializer = ComplaintSerializer(constituentComplaints, many=True)
+    if serializer.data == []:
+      return Response(serializer.data, status=204)
+    
+    return Response(serializer.data, status=200)
+    
   

@@ -74,6 +74,7 @@ const Dashboard = () => {
   const [openCases, setOpenCases] = useState([]);
   const [closedCases, setClosedCases] = useState([]);
   const [topComplaints, setTopComplaints] = useState([]);
+  const [mode, setMode] = useState('');
 
   useEffect(() => {
     fetchFromAPI('', authToken).then((data) => setComplaints(data));
@@ -82,16 +83,17 @@ const Dashboard = () => {
     fetchFromAPI('topComplaints/', authToken).then((data) => setTopComplaints(data));
   }, [authToken])
 
-
-  console.log('Complaints:', complaints);
-  console.log('Open cases:', openCases);
-  console.log('Closed cases', closedCases);
-  console.log('Top complaints:', topComplaints);
+  const changeData = (mode) => {
+    setMode(mode);
+    // if the mode is changed to consituents and the data isn't already there, fetch from api.
+    fetchFromAPI(`${mode}`, authToken).then((data) => setComplaints(data));
+  }
+  console.log(complaints);
   return (
     <>
       <div className='glance__container'>
         <div className='logo__div'>
-          <img src={logo} className='dashboard__logo' />
+          <img src={logo} className='dashboard__logo' alt='logo' />
         </div>
         <div className='glance__div'>
           <AtAGlance
@@ -100,13 +102,15 @@ const Dashboard = () => {
             topComplaints={topComplaints}
           />
         </div>
-        <div className='logoutBtn__div'>
-          <button className='logoutBtn' onClick={() => logoutUser()}> Logout </button>
+        <div className='btn__div'>
+          <button onClick={() => logoutUser()}> Logout </button>
+          { mode === '' && <button onClick={() => changeData('constituentComplaints/')}> Complaints by My Constituents </button>}
+          { mode === 'constituentComplaints/' && <button  onClick={() => changeData('')}> All District Complaints </button> }
         </div>
       </div>
       <div>
         <div className='complaints__div'>
-          <Complaints complaints={complaints} />
+          <Complaints complaints={complaints} /> 
         </div>
       </div>
     </>
