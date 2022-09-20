@@ -25,24 +25,19 @@ const LoginForm = () => {
 
   return (
     <div className='login-form__div'>
-      <form className='login-form__form' method='POST' onSubmit={handleSubmit}>
-        <label>
-          Username: 
+      <form className='login-form__form' method='POST' onSubmit={handleSubmit}> 
         <input
           type='text'
           placeholder='Username'
           name='username'
+          autoFocus
         />
-        </label>
-        <label>
-          Password:
         <input
           type='password'
           placeholder='Password'
           name='password'
         />
-        </label>
-        { errors && <div className='login-form__errors'> You have entered invalid credentials. </div>}
+        { errors ? <div className='login-form__errors'> Invalid credentials. </div> : <div></div>}
         <button type='submit'>Login</button>
       </form>
     </div>

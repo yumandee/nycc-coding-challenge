@@ -11,7 +11,9 @@ const Login = () => {
   }
 
   return (
-    <LoginForm />
+    <div className='login-form__container'>
+      <LoginForm />
+    </div>
   )
 }
 export default Login

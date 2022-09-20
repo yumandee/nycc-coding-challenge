@@ -1,33 +1,32 @@
 import React, { useState, useContext, useEffect } from 'react';
 import AuthContext from '../context/AuthContext';
 import { fetchFromAPI } from '../utils/fetchFromAPI';
+import { logo } from '../assets';
 
 const AtAGlance = ({ openCases, closedCases, topComplaints } ) => {
-  console.log("From at a glance: ", openCases);
   return (
-    <table>
-      <tbody>
-
+    <table className='glance__table'>
+      <thead>
         <tr>
           <th> # Open Cases</th>
-          <td>{openCases.length || 0}</td>
-        </tr>
-        <tr>
           <th> # Closed Cases</th>
-          <td>{closedCases.length || 0}</td>
-        </tr>
-        <tr>
           <th> Top Complaint Type</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>{openCases.length || 0}</td>
+          <td>{closedCases.length || 0}</td>
           <td>{topComplaints ? topComplaints[0] : 'None'}</td>
         </tr>
       </tbody>
     </table>
-  )
+  );
 }
 
 const Complaints = ({ complaints }) => {
   return (
-    <table>
+    <table className='complaints__table'>
       <thead>
         <tr>
           <th>Key</th>
@@ -47,19 +46,24 @@ const Complaints = ({ complaints }) => {
         {complaints.map((complaint) => (
           <tr key={complaint.unique_key}>
             <td>{complaint.unique_key}</td>
-            <td>{complaint.opendate}</td>
+            <td>{complaint.opendate || '--'}</td>
             <td>{complaint.closedate || '--'}</td>
-            <td>{complaint.complaint_type}</td>
+            <td>{complaint.complaint_type || '--'}</td>
             <td>{complaint.descriptor || '--'}</td>
-            <td>{complaint.account}</td>
-            <td>{complaint.community_board}</td>
-            <td>{complaint.council_dist}</td>
-            <td>{complaint.borough}</td>
-            <td>{complaint.city}</td>
-            <td>{complaint.zip}</td>
+            <td>{complaint.account || '--'}</td>
+            <td>{complaint.community_board || '--'}</td>
+            <td>{complaint.council_dist || '--'}</td>
+            <td>{complaint.borough || '--'}</td>
+            <td>{complaint.city || '--'}</td>
+            <td>{complaint.zip || '--'}</td>
           </tr>
         ))}
       </tbody>
+      <tfoot>
+        <tr>
+          <td colSpan={11}> Showing {complaints.length} of {complaints.length} complaints </td>
+        </tr>
+      </tfoot>
     </table>
   );
 }
@@ -85,19 +89,26 @@ const Dashboard = () => {
   console.log('Top complaints:', topComplaints);
   return (
     <>
-      <button onClick={() => logoutUser() }>
-        Logout
-      </button>
-      <section>
-        <div>
-          <AtAGlance openCases={openCases} closedCases={closedCases} topComplaints={topComplaints} />
+      <div className='glance__container'>
+        <div className='logo__div'>
+          <img src={logo} className='dashboard__logo' />
         </div>
-      </section>
-      <section>
-        <div>
+        <div className='glance__div'>
+          <AtAGlance
+            openCases={openCases}
+            closedCases={closedCases}
+            topComplaints={topComplaints}
+          />
+        </div>
+        <div className='logoutBtn__div'>
+          <button className='logoutBtn' onClick={() => logoutUser()}> Logout </button>
+        </div>
+      </div>
+      <div>
+        <div className='complaints__div'>
           <Complaints complaints={complaints} />
         </div>
-      </section>
+      </div>
     </>
   );
 };

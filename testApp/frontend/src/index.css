@@ -1,0 +1,114 @@
+table {
+  border-collapse: collapse;
+  width: 100%;
+  padding: 2px;
+}
+
+th, td {
+  border: 1px solid black;
+}
+
+td {
+  padding: 5px;
+}
+
+th {
+  background-color: #1155cc;
+  padding: 10px;
+  color: #eeeeee;
+}
+
+tfoot{
+  text-align: right;
+}
+.glance__table  {
+  text-align: center;
+}
+
+.glance__div {
+  flex-direction: row;
+  width: 80%;
+}
+.logo__div {
+  width: 10%;
+}
+.glance__container {
+  margin-bottom: 2rem;
+  display: flex;
+}
+
+.dashboard__logo{
+  height: 85px;
+  width: 85px;
+}
+
+.logoutBtn__div {
+  width: 10%; 
+}
+
+.logoutBtn {
+  float: right;
+  margin-right: 0;
+  width: 80%;
+  height: 30%;
+}
+
+.logoutBtn :hover {
+  background-color: #444444;
+}
+
+
+.login-form__container {
+  height: 100vh;
+  width: 100%;
+
+  background-size: cover;
+  
+}
+
+.login-form__div {
+  width: 100%;
+  min-height: 100%;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-form__form {
+  border-radius: 2px 2px 5px 5px;
+  /* width: 100%; */
+  max-width: 500px;
+  background: white;
+  position: relative;
+  padding: 20px;
+  box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.3);
+  text-align: center;
+}
+
+.login-form__form > button {
+  width: 50%;
+  height: 50px;
+  text-align: center;
+  background-color: #1155cc;
+  color: #eee;
+  border-radius: 2px;
+  border: none;
+
+}
+
+.login-form__form > button:hover {
+  cursor: pointer;
+  background-color: #678bcb;
+}
+.login-form__form > input {
+  display: block;
+  padding: 15px 10px;
+  margin-bottom: 10px;
+  width: 80%;
+  border: 1px solid #ddd;
+  transition: border-width 0.2s ease;
+  border-radius: 2px;
+  /* color: ; */
+}
