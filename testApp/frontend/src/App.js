@@ -1,13 +1,21 @@
 import React from 'react';
+import './index.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { Login } from './components';
+// import PrivateRoute from './utils/PrivateRoute';
+import { AuthProvider } from './context/AuthContext';
+
+import { Login, Dashboard } from './components';
 
 const App = () => (
   <BrowserRouter>
-    <Routes>
-      {/* <Route path='/' exact element= {< />} /> */}
-      <Route path='/login' element={<Login />} />
-    </Routes>
+    <div className='flex flex-col min-h-screen overflow-hidden'>
+      <AuthProvider>
+        <Routes>
+          <Route element={<Login />} path='/login' />
+          <Route element={<Dashboard />} path='/' />
+        </Routes>
+      </AuthProvider>
+    </div>
   </BrowserRouter>
 );
 
