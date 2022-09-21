@@ -1,4 +1,32 @@
 # New York City Council Full Stack Coding Challenge
+
+## Name: Mandy Yu
+## Time Taken: 
+- 1.5 days learning Django and REST Framework
+- 1 day debugging Django viewset routing
+- 2 days completing backend functionality
+- 1 day completing frontend functionality 
+
+
+## Login Screen
+<img width="624" alt="Screen Shot 2022-09-21 at 2 08 56 PM" src="https://user-images.githubusercontent.com/26307253/191579044-98aef691-47e6-4c5a-a3db-0b3dd6a2fd8a.png">
+
+## Dashboard
+<img width="1440" alt="Screen Shot 2022-09-21 at 2 09 20 PM" src="https://user-images.githubusercontent.com/26307253/191579116-94737ff5-ab0a-4bfb-98fd-eab41ffbd488.png">
+
+## Features
+- [x] User can login to an account using their credentials
+- [x] User can view the number of open and closed cases as well as the top complaint type.
+- [x] User can view a table of complaints focused on their district.
+- [x] User can view a table of complaints made by consitituents in their district.
+
+## Challenges
+- Learning Django from scratch
+- Understanding that changing starter code is perfectly fine
+- Routing is based off of regex and will cause a 404 for subsequent routes when default path is included first
+
+----
+
 You will have **1 full week** to complete this challenge starting when you received the challenge from our office. You can submit your challenge using our [Google Form](https://forms.gle/HXCXFiVvFAJ3WzAc7).
 
 ## The Task
